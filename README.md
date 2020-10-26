@@ -15,6 +15,8 @@ Pro realizaci projektu je možné využít jiné metody zabezpečení, ale musí
 
 
 [1] RSA, https://cs.wikipedia.org/wiki/RSA
+
 [2] AES, http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf
+
 [3] Digitální https://cs.wikipedia.org/wiki/Digit%C3%A1ln%C3%AD_certifik%C3%A1t
 certifikát
