@@ -24,8 +24,8 @@ def rozsifrovani_sifroveho_textu(sifrovy_text,klic):
 
 #Funkce vygeneruje symetricky klíč a uloží ho do globální proměnné.
 def AES_generovani_klicu():
-    klic = "TODO klic"
-    konsole("Posílám klíč: " + klic)
+    klic = "TODO symetrický klic"
+    konsole("Posílám symetrický klíč: " + klic)
     #TODO generovaní symetrického klíče!
     return klic
 
