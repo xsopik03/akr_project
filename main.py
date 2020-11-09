@@ -1,6 +1,8 @@
 #tak to tady musímě pěkně napsat aby jsme měli hodně bodíků
 #JV úspěšně commitnul
 
+import os;
+
 p_symetricky_klic = "";
 r_symetricky_klic = "";
 s_symetricky_klic = "";
@@ -9,6 +11,7 @@ asymetricky_klic2 = "";
 p_zprava = "";
 r_zprava = "";
 s_zprava = "";
+random = "";
 
 #Switch class, vytvoření vlastního switch.
 class switch(object):
@@ -43,22 +46,30 @@ def rozsifrovani_sifroveho_textu():
 #Funkce vygeneruje symetricky klíč a uloží ho do globální proměnné.
 def AES_generovani_klicu(key):
     # TODO generovaní symetrického klíče!
-    global p_symetricky_klic, r_symetricky_klic
-    if key == "p":p_symetricky_klic = "TODO generování symetrického klíče"
-    if key == 'r':r_symetricky_klic = "TODO generování druhého klíče"
-    konsole("Generuji symetrick7 klíč:" + p_symetricky_klic)
+    # Slouží pro předání a uložení generovaného klíče
+    global random,p_symetricky_klic, r_symetricky_klic
+    #Generuje nový random klíč
+    random_key = os.urandom(16)
+    #Zajišťuje uložení klíče do globální proměné
+    if (random == ""): random = random_key
+
+    konsole("Generuji symetrický klíč.")
+    #Zajišťuje generování dle parametru, záleží na tom - jaké je potřeba generovat
+    if key == "p":p_symetricky_klic = random_key;print("Konsole: Generovaný klíč:");print(p_symetricky_klic);konsole("Posílám vygenerované klíče");
+    if key == 'r':r_symetricky_klic = random;print("Konsole: Předaný klíč:");print(r_symetricky_klic)
+    if key == 'o':p_symetricky_klic = random_key; r_symetricky_klic = random_key;print("Konsole: Generované klíče:");print(r_symetricky_klic)
 
 #Funkce zašifruje text pomoci symetrické šifry AES.
 def AES_sifrovani():
     #TODO šifrovani!
-    global s_zprava, rsa
-    if p_symetricky_klic == "": AES_generovani_klicu("p"), RSA_sifrovani()
+    global s_zprava
+    if p_symetricky_klic == "": AES_generovani_klicu("p")
     s_zprava = "TODO sifrovani zpravy"
 
 #Funkce dešifruje text pomoci symetrické šifry AES.
 def AES_desifrovani():
     #TODO dešifrovani!
-    if r_symetricky_klic == "": AES_generovani_klicu("r"), RSA_desifrovani()
+    if r_symetricky_klic == "": AES_generovani_klicu("r")
     #Teoreticky není potřeba, zprávu pořád máme, takže stačí vypsat zprávu, ale pro úplnost, bych dešifroval
     global r_zprava
     r_zprava = p_zprava
@@ -83,7 +94,6 @@ def RSA_desifrovani():
 def konsole(konsol_text):
     print("Konsole: " + konsol_text)
 
-
 #Komunikacni kanál zobrazuje probíhající komunikaci mezi uživately a přenášený šifrový text.
 def komunikacni_kanal():
     nacteni_zpravy()
@@ -103,7 +113,7 @@ def menu():
             return 1
         if case("2"):
             konsole("Generování nových AES klíčů.")
-            AES_generovani_klicu(o)
+            AES_generovani_klicu("o")
             return 1
         if case("3"):
             konsole("TODO něco")
