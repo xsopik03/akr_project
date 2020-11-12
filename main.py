@@ -3,14 +3,23 @@
 
 import os;
 
+#Původní symetrický klíč
 p_symetricky_klic = "";
+#Rozšifrovaný symetrický klíč
 r_symetricky_klic = "";
+#Šifrovany klič pomoci RSA
 s_symetricky_klic = "";
+#RSA klíč 1
 asymetricky_klic1 = "";
+#RSA klíč 2
 asymetricky_klic2 = "";
+#Půvdoní zpráva
 p_zprava = "";
+#Rozšifrovaná zpráva
 r_zprava = "";
+#Sifrovaná zpráva
 s_zprava = "";
+#Random proměnná pro generování kníče
 random = "";
 
 #Switch class, vytvoření vlastního switch.
@@ -53,11 +62,10 @@ def AES_generovani_klicu(key):
     #Zajišťuje uložení klíče do globální proměné
     if (random == ""): random = random_key
 
-    konsole("Generuji symetrický klíč.")
     #Zajišťuje generování dle parametru, záleží na tom - jaké je potřeba generovat
-    if key == "p":p_symetricky_klic = random_key;print("Konsole: Generovaný klíč:");print(p_symetricky_klic);konsole("Posílám vygenerované klíče");
+    if key == "p":konsole("Generuji symetrický klíč.");p_symetricky_klic = random_key;print("Konsole: Generovaný klíč:");print(p_symetricky_klic);konsole("Posílám vygenerované klíče");
     if key == 'r':r_symetricky_klic = random;print("Konsole: Předaný klíč:");print(r_symetricky_klic)
-    if key == 'o':p_symetricky_klic = random_key; r_symetricky_klic = random_key;print("Konsole: Generované klíče:");print(r_symetricky_klic)
+    if key == 'o':konsole("Generuji symetrický klíč.");p_symetricky_klic = random_key; r_symetricky_klic = random_key;print("Konsole: Generované klíče:");print(r_symetricky_klic)
 
 #Funkce zašifruje text pomoci symetrické šifry AES.
 def AES_sifrovani():
