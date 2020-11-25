@@ -29,6 +29,8 @@ s_zprava = ""
 random = ""
 #bytová verze zprávy
 b_zprava = ""
+#Kontrola, zda byla zahájena konverzace
+zapocata_komunikace = 0
 
 #Switch class, vytvoření vlastního switch.
 class switch(object):
@@ -44,7 +46,14 @@ def case(*args):
 def nacteni_zpravy():
     konsole("Zadej zprávu, která má být přenesena:")
     uzivatel = input()
-    konsole("Odesilatel: " + uzivatel)
+    konsole("Uživatel1: " + uzivatel)
+    global p_zprava
+    p_zprava = uzivatel
+
+def nacteni_zpravy_odpoved():
+    konsole("Zadej zprávu, která má být přenesena:")
+    uzivatel = input()
+    konsole("Uživatel2: " + uzivatel)
     global p_zprava
     p_zprava = uzivatel
 
@@ -140,15 +149,45 @@ def konsole(konsol_text):
 
 #Komunikacni kanál zobrazuje probíhající komunikaci mezi uživately a přenášený šifrový text.
 def komunikacni_kanal():
+    global zapocata_komunikace
+    zapocata_komunikace = zapocata_komunikace + 1
     nacteni_zpravy()
     AES_sifrovani()
     sifrovy_text()
     AES_desifrovani()
     rozsifrovani_sifroveho_textu()
 
+def komunikacni_kanal_odpoved():
+    nacteni_zpravy_odpoved()
+    AES_sifrovani()
+    sifrovy_text()
+    AES_desifrovani()
+    rozsifrovani_sifroveho_textu()
+
+def komunikacni_kanal_pokracovani():
+    global r_zprava
+    end = 1
+    while end == 1:
+        print("Konverzační menu:\n1. Uživatel1 zpráva.\n2. Uživatel2 zpráva.\n3. Zobrazit poslední posílanou zprávu.\n4. Vrácení do hlavního menu.")
+        chose = input()
+        while switch(chose):
+            if case("1"):
+                komunikacni_kanal()
+            if case("2"):
+                komunikacni_kanal_odpoved()
+            if case("3"):
+                konsole("Poslední posílaná zpráva.")
+                rozsifrovani_sifroveho_textu()
+            if case("4"):
+                konsole("Vracíme se do hlavního menu.")
+                end = 0
+            #if(chose != 1 && chose != 2 && chose != 3 && chose != 4): print("Špatně zvoleno.")
+            break
+
+
 #Menu applikace, možné po zadání čísla vyzvat program k dané operaci.
 def menu():
-    print("Menu:\n1. Zahájení konverzace.\n2. Vygenerování nových symetrických klíčů.\n3. TODO něco.\n4. Konec")
+    print("Menu:\n1. Zahájení konverzace.\n2. Pokračovat v započaté konverzaci.\n3. Vygenerování nových symetrických klíčů.\n4. Konec")
     chose = input()
     while switch(chose):
         if case("1"):
@@ -156,11 +195,13 @@ def menu():
             komunikacni_kanal()
             return 1
         if case("2"):
-            konsole("Generování nových AES klíčů.")
-            AES_generovani_klicu("o")
+            konsole("Pokračování v započaté konverzaci.")
+            if zapocata_komunikace == 1: komunikacni_kanal_pokracovani()
+            else: konsole("Žádná konverzace nebyla započatá.")
             return 1
         if case("3"):
-            konsole("TODO něco")
+            konsole("Generování nových AES klíčů.")
+            AES_generovani_klicu("o")
             return 1
 
         if case("4"):
