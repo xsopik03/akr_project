@@ -1,26 +1,27 @@
 #tak to tady musímě pěkně napsat aby jsme měli hodně bodíků
 #JV úspěšně commitnul
 #zkouška
-import os;
+
+import os
 
 #Původní symetrický klíč
-p_symetricky_klic = "";
+p_symetricky_klic = ""
 #Rozšifrovaný symetrický klíč
-r_symetricky_klic = "";
+r_symetricky_klic = ""
 #Šifrovany klič pomoci RSA
-s_symetricky_klic = "";
+s_symetricky_klic = ""
 #RSA klíč 1
-asymetricky_klic1 = "";
+asymetricky_klic1 = ""
 #RSA klíč 2
-asymetricky_klic2 = "";
+asymetricky_klic2 = ""
 #Půvdoní zpráva
-p_zprava = "";
+p_zprava = ""
 #Rozšifrovaná zpráva
-r_zprava = "";
+r_zprava = ""
 #Sifrovaná zpráva
-s_zprava = "";
+s_zprava = ""
 #Random proměnná pro generování kníče
-random = "";
+random = ""
 
 #Switch class, vytvoření vlastního switch.
 class switch(object):
