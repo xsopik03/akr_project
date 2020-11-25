@@ -72,7 +72,9 @@ def AES_sifrovani():
     #TODO šifrovani!
     global s_zprava
     if p_symetricky_klic == "": AES_generovani_klicu("p")
+    #Tohle nahradit šifrováním AES
     s_zprava = "TODO sifrovani zpravy"
+    # Po sem
 
 #Funkce dešifruje text pomoci symetrické šifry AES.
 def AES_desifrovani():
@@ -80,7 +82,9 @@ def AES_desifrovani():
     if r_symetricky_klic == "": AES_generovani_klicu("r")
     #Teoreticky není potřeba, zprávu pořád máme, takže stačí vypsat zprávu, ale pro úplnost, bych dešifroval
     global r_zprava
+    #Tohle nahradit dešiforováním
     r_zprava = p_zprava
+    #Po sem
 
 #Funkce na šifrování symetrického klíče.
 def RSA_sifrovani():
