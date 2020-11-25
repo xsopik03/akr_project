@@ -104,7 +104,7 @@ def Encode(zprava):
 #převedení bytové zpráva do normální formy
 def Decode(zprava):
     #global r_zprava
-     return zprava.decode()
+    return zprava.decode()
 
 #Funkce dešifruje text pomoci symetrické šifry AES.
 def AES_desifrovani():
