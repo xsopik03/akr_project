@@ -3,6 +3,11 @@
 #zkouška
 
 import os
+from cryptography.fernet import Fernet
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import hashes
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+import base64
 
 #Původní symetrický klíč
 p_symetricky_klic = ""
@@ -22,6 +27,8 @@ r_zprava = ""
 s_zprava = ""
 #Random proměnná pro generování kníče
 random = ""
+#bytová verze zprávy
+b_zprava = ""
 
 #Switch class, vytvoření vlastního switch.
 class switch(object):
@@ -45,37 +52,59 @@ def nacteni_zpravy():
 def sifrovy_text():
     #Později bude volat šifrovací funkci a jako parametr bude předávat načtený text.
     sifrovy_text = s_zprava
+    sifrovy_text = Decode(sifrovy_text)
     konsole("Šifrovy text: " + sifrovy_text)
 
 #Funkce zajišťuje rozšifrován posílané zprávy uživatelem 1
 def rozsifrovani_sifroveho_textu():
     # Později bude volat šifrovací funkci a jako parametr bude předávat načtený text.
     zprava = r_zprava
+    zprava = Decode(zprava)
     konsole("Přijemce: " + zprava)
 
 #Funkce vygeneruje symetricky klíč a uloží ho do globální proměnné.
-def AES_generovani_klicu(key):
+def AES_generovani_klicu(key_G):
     # TODO generovaní symetrického klíče!
     # Slouží pro předání a uložení generovaného klíče
     global random,p_symetricky_klic, r_symetricky_klic
     #Generuje nový random klíč
-    random_key = os.urandom(16)
+    passw = os.urandom(16)
+    kdf = PBKDF2HMAC(
+        algorithm=hashes.SHA256(),
+        length=32,
+        salt=os.urandom(16),
+        iterations=100000,
+        backend=default_backend()
+    )
+    key = base64.urlsafe_b64encode(kdf.derive(passw))
     #Zajišťuje uložení klíče do globální proměné
-    if (random == ""): random = random_key
+    if (random == ""): random = key
 
     #Zajišťuje generování dle parametru, záleží na tom - jaké je potřeba generovat
-    if key == "p":konsole("Generuji symetrický klíč.");p_symetricky_klic = random_key;print("Konsole: Generovaný klíč:");print(p_symetricky_klic);konsole("Posílám vygenerované klíče");
-    if key == 'r':r_symetricky_klic = random;print("Konsole: Předaný klíč:");print(r_symetricky_klic)
-    if key == 'o':konsole("Generuji symetrický klíč.");p_symetricky_klic = random_key; r_symetricky_klic = random_key;print("Konsole: Generované klíče:");print(r_symetricky_klic)
+    if key_G == "p":konsole("Generuji symetrický klíč.");p_symetricky_klic = key;print("Konsole: Generovaný klíč:");print(p_symetricky_klic);konsole("Posílám vygenerované klíče");
+    if key_G == 'r':r_symetricky_klic = random;print("Konsole: Předaný klíč:");print(r_symetricky_klic)
+    if key_G == 'o':konsole("Generuji symetrický klíč.");p_symetricky_klic = key; r_symetricky_klic = key;print("Konsole: Generované klíče:");print(r_symetricky_klic)
 
 #Funkce zašifruje text pomoci symetrické šifry AES.
 def AES_sifrovani():
     #TODO šifrovani!
-    global s_zprava
+    global s_zprava, b_zprava
     if p_symetricky_klic == "": AES_generovani_klicu("p")
     #Tohle nahradit šifrováním AES
-    s_zprava = "TODO sifrovani zpravy"
+    b_zprava = Encode(p_zprava)
+    f = Fernet(p_symetricky_klic)
+    s_zprava = f.encrypt(b_zprava)
     # Po sem
+
+#převedení zprávy do bytové formy
+def Encode(zprava):
+    #global b_zprava
+    return zprava.encode()
+
+#převedení bytové zpráva do normální formy
+def Decode(zprava):
+    #global r_zprava
+     return zprava.decode()
 
 #Funkce dešifruje text pomoci symetrické šifry AES.
 def AES_desifrovani():
@@ -84,7 +113,9 @@ def AES_desifrovani():
     #Teoreticky není potřeba, zprávu pořád máme, takže stačí vypsat zprávu, ale pro úplnost, bych dešifroval
     global r_zprava
     #Tohle nahradit dešiforováním
-    r_zprava = p_zprava
+    f = Fernet(p_symetricky_klic)
+    r_zprava = f.decrypt(s_zprava)
+    #r_zprava = Decode(r_zprava)
     #Po sem
 
 #Funkce na šifrování symetrického klíče.
