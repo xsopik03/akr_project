@@ -1,6 +1,6 @@
 #tak to tady musímě pěkně napsat aby jsme měli hodně bodíků
 #JV úspěšně commitnul
-
+#zkouška
 import os;
 
 #Původní symetrický klíč
